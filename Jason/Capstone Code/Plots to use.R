@@ -64,35 +64,35 @@ hepC_age <- hepC_age %>% layout(title = "Infection with HepC in realtion to the 
 hepC_age
 
 
-gonorrhea_bmi <- gonorrhea_bmi %>% layout(title = "Infection with Gonorrhea in realtion to the Average age of the parents",
+gonorrhea_bmi <- gonorrhea_bmi %>% layout(title = "Infection with Gonorrhea in realtion to the average BMI/Weight of the Mother",
                                           barmode = 'group',
                                           xaxis = list(title = "Mothers report on Gonorrhea; No; Yes; Unknown"),
                                           yaxis = list(title = "Average BMI/Weight"))
 
 gonorrhea_bmi
 
-syphilis_bmi <- syphilis_bmi %>% layout(title = "Infection with Syphilis in realtion to the Average age of the parents",
+syphilis_bmi <- syphilis_bmi %>% layout(title = "Infection with Syphilis in realtion to the average BMI/Weight of the Mother",
                               barmode = 'group',
                               xaxis = list(title = "Mothers report on Syphilis; No; Yes; Unknown"),
                               yaxis = list(title = "Average BMI/Weight"))
 syphilis_bmi
 
 
-chlamydia_bmi <- chlamydia_bmi %>% layout(title = "Infection with Chlamydia in realtion to the Average age of the parents",
+chlamydia_bmi <- chlamydia_bmi %>% layout(title = "Infection with Chlamydia in realtion to the average BMI/Weight of the Mother",
                               barmode = 'group',
                               xaxis = list(title = "Mothers report on Chlamydia; No; Yes; Unknown"),
                               yaxis = list(title = "Average BMI/Weight"))
 chlamydia_bmi
 
 
-hepB_bmi <- hepB_bmi %>% layout(title = "Infection with HepB in realtion to the Average age of the parents",
+hepB_bmi <- hepB_bmi %>% layout(title = "Infection with HepB in realtion to the average BMI/Weight of the Mother",
                               barmode = 'group',
                               xaxis = list(title = "Mothers report on HepB; No; Yes; Unknown"),
                               yaxis = list(title = "Average BMI/Weight"))
 hepB_bmi
 
 
-hepC_bmi <- hepC_bmi %>% layout(title = "Infection with HepC in realtion to the Average age of the parents",
+hepC_bmi <- hepC_bmi %>% layout(title = "Infection with HepC in realtion to the average BMI/Weight of the Mother",
                               barmode = 'group',
                               xaxis = list(title = "Mothers report on HepC; No; Yes; Unknown"),
                               yaxis = list(title = "Average BMI/Weight"))
@@ -335,10 +335,217 @@ ftobacco_age3= ggplot(ftobacco_age, aes(x=fathers_age, y=cigs_tri3_average, grou
 
 ftobacco_age3
 
+########################
+
+
+
+#servorUI Rendor plots 
+
+
+#Graph 1
+output$"Delivery Payment Option Based on Average Parental Education" =rendorPlot({
+  del_ed
+})
+
+
+#Graph 2 
+output$"Delivery Payment Option Based on Average Parental Age" =rendorPlot({
+  del_age
+})
+
+
+#################
+
+
+
+#Graph 2 
+output$"Infection with Gonorrhea in realtion to the Average age of the parents" =rendorPlot({
+  gonorrhea_age
+})
+
+#Graph 3
+output$"Infection with Syphilis in realtion to the Average age of the parents" =rendorPlot({
+  syphilis_age
+})
+
+#Graph 4 
+output$"Infection with Chlamydia in realtion to the Average age of the parents" =rendorPlot({
+  chlamydia_age
+})
+
+#Graph 5
+output$"Infection with HepB in realtion to the Average age of the parents" =rendorPlot({
+  hepB_age
+})
+
+#Graph 6 
+output$"Infection with HepC in realtion to the Average age of the parents" =rendorPlot({
+  hepC_age
+})
+
+
+######################
+
+#Graph 7 
+output$"Infection with Gonorrhea in realtion to the average BMI/Weight of the Mother" =rendorPlot({
+  gonorrhea_bmi
+})
+
+#Graph 8 
+output$"Infection with Syphilis in realtion to the average BMI/Weight of the Mother" =rendorPlot({
+  syphilis_bmi
+})
+
+#Graph 9 
+output$"Infection with Chlamydia in realtion to the average BMI/Weight of the Mother" =rendorPlot({
+  chlamydia_bmi
+})
+
+#Graph 10 
+output$"Infection with HepB in realtion to the average BMI/Weight of the Mother" =rendorPlot({
+  hepB_bmi
+})
+
+#Graph 11
+output$"Infection with HepC in realtion to the average BMI/Weight of the Mother" =rendorPlot({
+  hepC_bmi
+})
+
+
+#################
+
+#Graph 12
+output$"Use of Steroids medication in relation to parents age" =rendorPlot({
+  steroids_age
+})
+
+#Graph 13
+output$"Use of Antobiotics medication in relation to parents age" =rendorPlot({
+  antibiotics_age
+})
+
+#Graph 14
+output$"Use of Anesthesia medication in relation to parents age" =rendorPlot({
+  anesthesia_age
+})
+
+##################
+
+
+
+#Graph 15
+output$"Use of Steroids medication in relation to mothers BMI/Weight" =rendorPlot({
+  steroids_bmi
+})
+
+#Graph 16
+output$"Use of Antibiotics medication in relation to mothers BMI/Weight" =rendorPlot({
+  antibiotics_bmi
+})
+
+#Graph 17
+output$"Use of Anesthesia medication in relation to mothers BMI/Weight" =rendorPlot({
+  anesthesia_bmi
+})
+
+#################
+
+
+
+#Graph 18
+output$"Final Delivery Method in relation to the average age of the parents" =rendorPlot({
+  final_del_age
+})
+
+#Graph 19
+output$"Final Delivery Method in relation to the average BMI/Weight of the mother" =rendorPlot({
+  final_del_bmi
+})
+
+##################
 
 
 
 
+#Graph 20 
+output$"Average Prenetal Visits in Relation to the Age of the Mother" =rendorPlot({
+  prenatal_age_mother
+})
+
+#Graph 21 
+output$"Average Prenetal Visits in Relation to the Age of the Father" =rendorPlot({
+  prenatal_age_father
+})
+
+
+###################
+
+
+
+#Graph 22
+output$"Paternity Acknowledgment in relation to the average of the parents age" =rendorPlot({
+  pat_age
+})
+
+#Graph 23 
+output$"Paternity Acknowledgment in relation to the average BMI/Weight of the Mother" =rendorPlot({
+  pat_bmi
+})
+
+
+##################
+
+
+
+#Graph 24
+output$"Hispanic Origin in relation to the Average age of the Parents" =rendorPlot({
+  hisp_age
+})
+
+#Graph 25 
+output$"Hispanic Origin in relation to the Average BMI/Weight of the Mother" =rendorPlot({
+  hisp_bmi
+})
+
+
+#################
+
+
+
+#Graph 26 
+output$"Average Tobacco Use in the 1st Trimester in Relation to the Age of the Mother" =rendorPlot({
+  mtobacco_age1
+})
+
+#Graph 27
+output$"Average Tobacco Use in the 2nd Trimester in Relation to the Age of the Mother" =rendorPlot({
+  mtobacco_age2
+})
+
+#Graph 28
+output$"Average Tobacco Use in the 3rd Trimester in Relation to the Age of the Mother" =rendorPlot({
+  mtobacco_age3
+})
+
+
+#################
+
+
+
+#Graph 29
+output$"Average Tobacco Use in the 1st Trimester in Relation to the Age of the father" =rendorPlot({
+  ftobacco_age1
+})
+
+#Graph 30
+output$"Average Tobacco Use in the 2nd Trimester in Relation to the Age of the father" =rendorPlot({
+  ftobacco_age2
+})
+
+#Graph 31
+output$"Average Tobacco Use in the 3rd Trimester in Relation to the Age of the father" =rendorPlot({
+  ftobacco_age3
+})
 
 
 
