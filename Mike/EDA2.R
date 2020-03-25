@@ -1,10 +1,10 @@
 library(shiny)
 library(ggplot2)
 library(tidyr)
+library(plyr)
 library(dplyr)
 library(grid)
 library(gridExtra)
-library(plyr)
 library(plotly)
 options(digits=10)
 
@@ -32,58 +32,78 @@ plot_ly(APGAR16, x = ~APGAR_score_10min, y =~birth_weight_gm_average, type = 'bo
   add_trace(y = ~birth_weight_gm_average, name = 'Birth Weight') %>% 
   layout(yaxis = list(title = 'Average'), barmode = 'group')
 
-########################## APGAR SCORE ##########################
+plot_ly(test1, x = ~APGAR_score_5min, y = ~mothers_education_average, type = 'bar', name = "mothers_education_average") %>%
+  add_trace(y = ~fathers_education_average, name = 'fathers_education_average') %>%
+  layout(yaxis = list(title = 'Average'), barmode = 'group')
+
+
+plot_ly(test1, x = ~APGAR_score_5min, y = ~fathers_age_average, type = 'bar', name = "fathers_age_average") %>%
+  add_trace(y = ~mothers_age_average, name = 'mothers_age_average') %>%
+  layout(yaxis = list(title = 'Average'), barmode = 'group')
+
+
+
+
+########################## APGAR SCORE DATA FRAME ##########################
 
 
 
 # APGAR DataFrame
 APGAR16 <- nat2016 %>% 
-  group_by(APGAR_score_5min,APGAR_score_10min,
-           combined_gestation_wk,birth_weight_gm) %>% 
+  group_by(APGAR_score_5min,APGAR_score_10min) %>% 
   summarise_at(vars(mothers_education,mothers_age,fathers_education,fathers_age,mothers_race,
                     mothers_hispanic_origin2,fathers_race,fathers_hispanic_origin2,n_prenatal_visits,
-                    mothers_marital_status,mothers_bmi,last_norm_menses_mo),
+                    mothers_marital_status,mothers_bmi,last_norm_menses_mo,combined_gestation_wk,birth_weight_gm),
                list(average = mean))
 
 test1 <- nat2016 %>% 
   group_by(mothers_education,mothers_age,fathers_education,fathers_age,mothers_race,
                     mothers_hispanic_origin2,fathers_race,fathers_hispanic_origin2,n_prenatal_visits,
                     mothers_marital_status,mothers_bmi,wic) %>% 
-  summarise_at(APGAR_score_5min,APGAR_score_10min,
-               combined_gestation_wk,birth_weight_gm)
+  summarise_at(vars(APGAR_score_5min,APGAR_score_10min,
+               combined_gestation_wk,birth_weight_gm),
+               list(average = mean))
 
 
 
+#APGAR Mothers Education, Age, BMI
+plot_ly(APGAR16, x = ~APGAR_score_5min, y = ~mothers_education_average, type = 'bar', name = "mothers_education_average") %>%
+  add_trace(y = ~mothers_age_average, name = 'mothers_age_average Education') %>%
+  add_trace(y = ~mothers_bmi_average, name = 'mothers_bmi_average Education') %>%
+  layout(yaxis = list(title = 'Average'), barmode = 'group')
 
-
-plot_ly(test1, x = ~APGAR_score_5min, y = ~mothers_education_average, type = 'bar', name = "mothers_education_average") %>%
-  add_trace(y = ~fathers_education_average, name = 'Fathers Education') %>%
+plot_ly(APGAR16, x = ~APGAR_score_5min, y = ~mothers_age_average, type = 'bar', name = "Mother's Age") %>% 
+  add_trace(y = ~fathers_age_average, name = 'Fathers Age') %>%
   layout(yaxis = list(title = 'Average'), barmode = 'group')
 
 
-plot_ly(test1, x = ~APGAR_score_5min, y = ~mothers_education_average, type = 'bar', name = "mothers_education_average") %>%
-  add_trace(y = ~mothers_age_average, name = 'Mothers Age') %>%
+n_prenatal_visits
+
+
+plot_ly(test1, x = ~mothers_education, y = ~APGAR_score_5min_average, type = 'bar', name = "mothers_education_average") %>%
+  add_trace(y = ~fathers_education_average, name = 'fathers_education_average') %>%
+  add_trace(y = ~n_prenatal_visits_average, name = 'n_prenatal_visits_average') %>%
   layout(yaxis = list(title = 'Average'), barmode = 'group')
 
-plot_ly(APGAR16, x = ~APGAR_score_5min, y = ~mothers_education_average, type = 'bar', name = "APGAR 5") %>%
-  add_trace(y = ~fathers_education_average, name = 'Fathers Education') %>%
-  layout(yaxis = list(title = 'Average'), barmode = 'group')
+
+
+
 
 
 #APGAR Mothers Education
-APGAR5_MEDU <- plot_ly(APGAR16, x = ~APGAR_score_5min, y = ~mothers_education_average, type = 'bar', name = "APGAR 5") %>%
+APGAR5_MEDU <- plot_ly(APGAR16, x = ~APGAR_score_5min, y = ~mothers_education_average, type = 'bar', name = "mothers_education_average") %>%
   add_trace(y = ~fathers_education_average, name = 'Fathers Education') %>%
   layout(yaxis = list(title = 'Average'), barmode = 'group')
 APGAR5_MEDU
 
 
-APGAR10_MEDU <- plot_ly(APGAR16, x = ~APGAR_score_10min, y = ~mothers_education_average, type = 'bar', name = "APGAR 10") %>%
+APGAR10_MEDU <- plot_ly(APGAR16, x = ~APGAR_score_10min, y = ~mothers_education_average, type = 'bar', name = "mothers_education_average") %>%
   add_trace(y = ~mothers_education_average, name = 'Mothers Education') %>%
   layout(yaxis = list(title = 'Average'), barmode = 'group')
 APGAR10_MEDU  
-  
 
-#APGAR Mothers Age
+
+#APGAR Age
 APGAR5_MAGE <- plot_ly(APGAR16, x = ~APGAR_score_5min, y = ~mothers_age_average, type = 'bar', name = "Mother's Age") %>% 
   add_trace(y = ~fathers_age_average, name = 'Fathers Age') %>%
   layout(yaxis = list(title = 'Average'), barmode = 'group')
@@ -97,24 +117,23 @@ APGAR10_MAGE
 
 
 #APGAR Mothers Prenatal Visits
-APGAR5_MPRE <- plot_ly(APGAR16, x = ~APGAR_score_5min, y = ~n_prenatal_visits_average, type = 'bar', name = "APGAR 5") %>% 
-  add_trace(y = ~n_prenatal_visits_average, name = 'Number of Prenatal Visits') %>% 
-  layout(yaxis = list(title = 'Average'), barmode = 'group')
+APGAR5_MPRE <- plot_ly(APGAR16, x = ~APGAR_score_5min, y = ~n_prenatal_visits_average, type = 'bar', name = "APGAR 5") 
+APGAR5_MPRE
 
 
-APGAR10_MPRE <- plot_ly(APGAR16, x = ~APGAR_score_10min, y = ~n_prenatal_visits_average, type = 'bar', name = "APGAR 10") %>% 
-  add_trace(y = ~n_prenatal_visits_average, name = 'Number of Prenatal Visits') %>% 
-  layout(yaxis = list(title = 'Average'), barmode = 'group')
+APGAR10_MPRE <- plot_ly(APGAR16, x = ~APGAR_score_10min, y = ~n_prenatal_visits_average, type = 'bar', name = "APGAR 10")
+APGAR10_MPRE
 
 
 #APGAR Gestation Period
-plot_ly(test1, x = ~APGAR_score_5min, y =~combined_gestation_wk_average, type = 'box', name = "APGAR 5") %>% 
-  add_trace(y = ~combined_gestation_wk_average, name = 'Gestation Weeks') %>% 
+
+
+
+plot_ly(APGAR16, x = ~APGAR_score_5min, y =~combined_gestation_wk_average, type = 'box', name = "APGAR 5") %>% 
   layout(yaxis = list(title = 'Average'), barmode = 'group')
 
 
-plot_ly(test1, x = ~APGAR_score_10min, y =~combined_gestation_wk_average, type = 'box', name = "APGAR 10") %>% 
-  add_trace(y = ~combined_gestation_wk_average, name = 'Gestation Weeks') %>% 
+plot_ly(APGAR16, x = ~APGAR_score_10min, y =~combined_gestation_wk_average, type = 'bar', name = "APGAR 10") %>% 
   layout(yaxis = list(title = 'Average'), barmode = 'group')
 
 
@@ -364,20 +383,26 @@ infant_after <- nat2016 %>%
 
 
 
-plot_ly(infant_after, x = ~infant_living_at_report, y = ~mothers_bmi_average, type = 'bar', name = "mothers_bmi_average") %>% 
-  add_trace(y = ~mothers_age_average, name = 'Mothers Age') %>% 
-  layout(yaxis = list(title = 'Average'), barmode = 'group')
-
-
-plot_ly(infant_after, x = ~infant_living_at_report, y = ~mothers_bmi_average, type = 'bar', name = "mothers_bmi_average") %>% 
-  add_trace(y = ~mothers_age_average, name = 'Mothers Age') %>% 
-  layout(yaxis = list(title = 'Average'), barmode = 'group')
-
-
-
-plot_ly(infant_after, x = ~infant_breastfed_at_discharge, y = ~mothers_education_average, type = 'box', name = "mothers_education_average") %>% 
+plot_ly(infant_after, x = ~infant_living_at_report, y = ~mothers_age_average, type = 'bar', name = "Mothers Age") %>% 
   add_trace(y = ~mothers_bmi_average, name = 'mothers_bmi_average') %>% 
   layout(yaxis = list(title = 'Average'), barmode = 'group')
+
+
+plot_ly(infant_after, x = ~infant_living_at_report, y = ~mothers_bmi_average, type = 'bar', name = "mothers_bmi_average") %>% 
+  add_trace(y = ~mothers_age_average, name = 'Mothers Age') %>% 
+  layout(yaxis = list(title = 'Average'), barmode = 'group')
+
+
+
+### Infant Breastfed ###
+
+plot_ly(infant_after, x = ~infant_breastfed_at_discharge, y = ~mothers_education_average, type = 'box', name = "mothers_education_average") 
+
+
+plot_ly(infant_after, x = ~infant_breastfed_at_discharge, y = ~mothers_bmi_average, type = 'box', name = "mothers_bmi_average") 
+
+
+plot_ly(infant_after, x = ~infant_breastfed_at_discharge, y = ~mothers_age_average, type = 'box', name = "mothers_age_average") 
 
 
 
