@@ -185,40 +185,44 @@ ui <- shinyUI(fluidPage(bootstrap(),  # minty https://bootswatch.com/
                                                                       ),
                                                                       # Main panel for displaying outputs
                                                                       mainPanel(
-                                                                        h3("Customized Statistics Based on 2017 CDC Data"), hr(),
+                                                                        h2("Statistics Based on 2017 CDC Data"), hr(),
                                                                         fluidRow(
                                                                           column(4,
                                                                                  h4("Total Infant Deaths"),
-                                                                                 h4("in the U.S."),
+                                                                                 h5("In the U.S."),
                                                                                  valueBoxOutput("deaths_demo_box")
                                                                           ),
                                                                           column(4,
-                                                                                 h4("Your Calculated"),
-                                                                                 h4("Infant Death Rate"),
-                                                                                 valueBoxOutput("deathrate_demo_box")
+                                                                                 h4("National Infant"),
+                                                                                 h5("Death Rate"),
+                                                                                 valueBoxOutput("nat_deathrate_demo_box"),
+                                                                                 h6("Deaths Per 1,000 Births"),
                                                                           ),
                                                                           column(4,
-                                                                                 h4("National Infant Death Rate"),
-                                                                                 valueBoxOutput("nat_deathrate_demo_box")
+                                                                                 h4(class= "text-secondary", "Infant Death Rate"),
+                                                                                 h5(class= "text-info", "For Your Demographic"),
+                                                                                 valueBoxOutput("deathrate_demo_box"),
+                                                                                 h6("Deaths Per 1,000 Births"),
                                                                           )
                                                                         ), hr(),
                                                                         fluidRow(
                                                                           column(4,
                                                                                  h4("Total Live Births"),
-                                                                                 h4("in the U.S."),
+                                                                                 h5("In the U.S."),
                                                                                  valueBoxOutput("births_demo_box"),
                                                                           ),
                                                                           column(4,
                                                                                  h4("National Infant"),
-                                                                                 h4("Birth Rate"),
+                                                                                 h5("Birth Rate"),
                                                                                  valueBoxOutput("birthrate_demo_box"),
                                                                                  h6("Births Per 1,000 People")
                                                                           ),
                                                                           column(4,
-                                                                                 h4("Total"),
-                                                                                 h4("Fertility Rate"),
+                                                                                 h4("General"),
+                                                                                 h5("Fertility Rate"),
                                                                                  valueBoxOutput("fertrate_demo_box"),
-                                                                                 h6("Births Per 1,000 People")
+                                                                                 h6("Births Per 1,000 Women"),
+                                                                                 h6("Ages 15 to 44 Years Old")
                                                                           )
                                                                         ), hr(),
                                                                       )
@@ -245,7 +249,7 @@ ui <- shinyUI(fluidPage(bootstrap(),  # minty https://bootswatch.com/
                                                              plotlyOutput("health_risks_plot")
                                                            ),
                                                            tabPanel(
-                                                             "Enter Your Info & View Results", br(),
+                                                             "Enter Your Info & View Results", br(), br(),
                                                              sidebarLayout(
                                                                sidebarPanel(br(),
                                                                             h5(class = "text-center", "Select Options to See Results"), hr(),
@@ -273,35 +277,46 @@ ui <- shinyUI(fluidPage(bootstrap(),  # minty https://bootswatch.com/
                                                                                                                                                   "Previous Preterm Births"), selected=F)
                                                                ),
                                                                mainPanel(
-                                                                 h3("Customized Statistics Based on 2017 CDC Data"), br(),
+                                                                 h2("Statistics Based on 2017 CDC Data"), hr(),
                                                                  fluidRow(
                                                                    column(4,
-                                                                          h4("Total U.S. Live Births"),
-                                                                          valueBoxOutput("births_health_box")
-                                                                   ),
-                                                                   column(4,
-                                                                          h4("National Infant Birth Rate"),
-                                                                          valueBoxOutput("birthrate_health_box")
-                                                                   ),
-                                                                   column(4,
-                                                                          h4("National Fertility Rate"),
-                                                                          valueBoxOutput("fertrate_health_box")
-                                                                   )
-                                                                 ), br(),
-                                                                 fluidRow(
-                                                                   column(4,
-                                                                          h4("Total U.S. Infant Deaths"),
+                                                                          h4("Total Infant Deaths"),
+                                                                          h5("In the U.S."),
                                                                           valueBoxOutput("deaths_health_box")
                                                                    ),
                                                                    column(4,
-                                                                          h4("Your Infant Death Rate"),
-                                                                          valueBoxOutput("deathrate_health_box")
+                                                                          h4("National Infant"),
+                                                                          h5("Death Rate"),
+                                                                          valueBoxOutput("nat_deathrate_health_box"),
+                                                                          h6("Deaths Per 1,000 Births")
                                                                    ),
                                                                    column(4,
-                                                                          h4("National Infant Death Rate"),
-                                                                          valueBoxOutput("nat_deathrate_health_box")
+                                                                          h4(class= "text-secondary", "Infant Death Rate"),
+                                                                          h5(class= "text-info", "For Your Health"),
+                                                                          valueBoxOutput("deathrate_health_box"),
+                                                                          h6("Deaths Per 1,000 Births")
                                                                    )
-                                                                 )
+                                                                 ), hr(),
+                                                                 fluidRow(
+                                                                   column(4,
+                                                                          h4("Total Live Births"),
+                                                                          h5("In the U.S."),
+                                                                          valueBoxOutput("births_health_box")
+                                                                   ),
+                                                                   column(4,
+                                                                          h4("National Infant"),
+                                                                          h5("Birth Rate"),
+                                                                          valueBoxOutput("birthrate_health_box"),
+                                                                          h6("Births Per 1,000 People")
+                                                                   ),
+                                                                   column(4,
+                                                                          h4("Total Fertility"),
+                                                                          h5("Rate"),
+                                                                          valueBoxOutput("fertrate_health_box"),
+                                                                          h6("Births Per 1,000 Women"),
+                                                                          h6("Ages 15 to 44 Years Old")
+                                                                   )
+                                                                 ), hr()
                                                                )
                                                              )
                                                            )
@@ -312,7 +327,15 @@ ui <- shinyUI(fluidPage(bootstrap(),  # minty https://bootswatch.com/
                                                            tabPanel(
                                                              "Prenatal Visits", br(),
                                                              h3("Average Prenetal Visits Based on Mother's Age"), br(),
-                                                             plotOutput("bmi_prenat_mother")
+                                                             plotOutput("bmi_prenat_mother"), hr(),
+                                                             p("This plot represents the characteristics that are shared between 
+                                                               the age of the mother in regards to their consistency in keeping 
+                                                               up with prenatal visits for the child."),
+                                                             p("There appears to be strong linearity with mothers, with a gradual 
+                                                               increase the older they get.  The best number of prenatal visits 
+                                                               also appears be between 12 to 14."),
+                                                             p("An interesting rise also occurs around the time the mother reaches 
+                                                               50, with an average of around 16 prenatal visits occurring then.")
                                                            ),
                                                            tabPanel(
                                                              "NICU Admittance Rate", br(),
@@ -353,7 +376,17 @@ ui <- shinyUI(fluidPage(bootstrap(),  # minty https://bootswatch.com/
                                                            tabPanel(
                                                              "Final Delivery Method", br(),
                                                              h3("Final Delivery Method Based on Average BMI of Mother"), hr(),
-                                                             plotlyOutput("bmi_final_del")
+                                                             plotlyOutput("bmi_final_del"), hr(),
+                                                             p("Along the x-axis, the numbers define the delivery procedure that has 
+                                                               taken place for the child, they are as followed:"),
+                                                             p(class = "text-secondary", "1 = Spontaneous, 2 = Forceps, 3 = Vacuum, 4 = Cesarean, 5 = Unknown or not stated"),
+                                                             p("This plot represents the characteristics that are shared between 
+                                                               the health of the mother regarding their total BMI during pregnancy, 
+                                                               their weight prior to pregnancy, and their weight while going into labor."),
+                                                             p("It is interesting to note that not states/unknown is marked as the highest 
+                                                               for delivery. It is also interesting to note the consistent trends that exist 
+                                                               for the mothers BMI, and weight before/during pregnancy does not change for 
+                                                               any of the 5 categories by that much.")
                                                            )
                                                )
                                       ),
@@ -632,13 +665,13 @@ server <- shinyServer(function(input, output, session) {
   output$birthrate_demo_box <- renderValueBox({
     valueBox(
       "",
-      value = 11
+      value = 12.1
     )
   })
   output$fertrate_demo_box <- renderValueBox({
     valueBox(
       "",
-      value = 59
+      value = 60.2
     )
   })
   
@@ -823,13 +856,13 @@ server <- shinyServer(function(input, output, session) {
   output$birthrate_health_box <- renderValueBox({
     valueBox(
       "",
-      value = 11
+      value = 12.1
     )
   })
   output$fertrate_health_box <- renderValueBox({
     valueBox(
       "",
-      value = 59
+      value = 60.2
     )
   })
   
