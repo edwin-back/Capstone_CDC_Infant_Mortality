@@ -16,6 +16,7 @@ library(base)
 library(ExPanDaR)
 library(ggplot2)
 library(rsconnect)
+
 #############################             IMPORT OF RAW DATA    ######################
 ######################################################################################
 ######################################################################################
@@ -40,7 +41,7 @@ rsconnect::setAccountInfo(name='mikelim91',
 ui <- fluidPage(theme = shinytheme("sandstone"),   #slate
                 titlePanel("CAPSTONE PROJECT : Improving Infant Natality & Mortality Rates", "Baptiste Mokas - Shiny App"),
                 navbarPage("-",
-                           
+
                            tabPanel("Product",
                                     img(src='nycdsa.png', height="5%", align = "right"),
                                     mainPanel(
@@ -57,8 +58,8 @@ ui <- fluidPage(theme = shinytheme("sandstone"),   #slate
                                                              "Improve Natality & Reduce Mortality based on various health & life-style choices ",'<br/>'
                                                                 )
                                                              )),
-                                                  
-                                                  
+
+
                                                   tabPanel("Mother's General Information",
                                                            HTML(
                                                              paste(
@@ -73,7 +74,7 @@ ui <- fluidPage(theme = shinytheme("sandstone"),   #slate
                                                                "Race"
                                                              )
                                                            )),
-                                                  
+
                                                   tabPanel("Mother's Personal Health Information",
                                                            HTML(
                                                              paste(
@@ -94,7 +95,7 @@ ui <- fluidPage(theme = shinytheme("sandstone"),   #slate
                                                                "BMI if known"
                                                              )
                                                            )),
-                                                  
+
                                                   tabPanel("Advice & Results",
                                                            HTML(
                                                              paste(
@@ -116,23 +117,23 @@ ui <- fluidPage(theme = shinytheme("sandstone"),   #slate
                                                                "Random Facts",
                                                                '<br/>',
                                                                "Facts that pertain to person within specific subpopulation/cluster"
-                                                               
+
                                                              )
                                                            ))
                                       )
                                     )
-                                    
-                                    
-                           ), 
-                           
-                           
-                           tabPanel("RAW DATA", 
+
+
+                           ),
+
+
+                           tabPanel("RAW DATA",
                                     mainPanel(
                                       tabsetPanel(type = "tabs",
-                                                  tabPanel("Tab test", 
+                                                  tabPanel("Tab test",
                                                            HTML(paste(
                                                              '<br/>',
-                                                             
+
                                                              "test 1?",'<br/>',
                                                              "test 2?",'<br/>',
                                                              "test 3 ?",'<br/>',
@@ -147,7 +148,7 @@ ui <- fluidPage(theme = shinytheme("sandstone"),   #slate
                                                   tabPanel("Tab test",
                                                            HTML(paste(
                                                              '<br/>',
-                                                             
+
                                                              "test 1?",'<br/>',
                                                              "test 2?",'<br/>',
                                                              "test 3 ?",'<br/>',
@@ -158,23 +159,23 @@ ui <- fluidPage(theme = shinytheme("sandstone"),   #slate
                                                              "test6 ?"
                                                            )
                                                            )),
-                                                  tabPanel("Tab test", 
-                                                           tabsetPanel(type = "tabs", 
-                                                                       
+                                                  tabPanel("Tab test",
+                                                           tabsetPanel(type = "tabs",
+
                                                                        tabPanel("Tab test"
                                                                                 ),
-                                                                       
+
                                                                        tabPanel("Tab test")
-                                                                       ) 
-                                                           
+                                                                       )
+
                                                           ),
-                                                  
+
                                                   tabPanel("tab",
                                                           tabsetPanel(type = "tabs",
-                                                                       tabPanel("test2", 
+                                                                       tabPanel("test2",
                                                                                 HTML(paste(
                                                                                   '<br/>',
-                                                                                  
+
                                                                                   "test 1?",'<br/>',
                                                                                   "test 2?",'<br/>',
                                                                                   "test 3 ?",'<br/>',
@@ -185,10 +186,10 @@ ui <- fluidPage(theme = shinytheme("sandstone"),   #slate
                                                                                   "test6 ?"
                                                                                 )
                                                                                 )),
-                                                                      tabPanel("test 6", 
+                                                                      tabPanel("test 6",
                                                                                HTML(paste(
                                                                                  '<br/>',
-                                                                                 
+
                                                                                  "test 1?",'<br/>',
                                                                                  "test 2?",'<br/>',
                                                                                  "test 3 ?",'<br/>',
@@ -199,10 +200,10 @@ ui <- fluidPage(theme = shinytheme("sandstone"),   #slate
                                                                                  "test6 ?"
                                                                                )
                                                                                )),
-                                                                      tabPanel("test8", 
+                                                                      tabPanel("test8",
                                                                                HTML(paste(
                                                                                  '<br/>',
-                                                                                 
+
                                                                                  "test 1?",'<br/>',
                                                                                  "test 2?",'<br/>',
                                                                                  "test 3 ?",'<br/>',
@@ -217,22 +218,22 @@ ui <- fluidPage(theme = shinytheme("sandstone"),   #slate
                                                                       tabPanel(".."),
                                                                       tabPanel("test")
                                                         )
-                                                  
-                                                  
-                                                  
-                                                  
-                                                  
+
+
+
+
+
                                                   )
                                             )
                                     )
                                     ),
-                                    
-                           
-                           
-                           tabPanel("METHODOLOGY", 
+
+
+
+                           tabPanel("METHODOLOGY",
                                     HTML(paste(
                                       '<br/>',
-                                      
+
                                       "test 1?",'<br/>',
                                       "test 2?",'<br/>',
                                       "test 3 ?",'<br/>',
@@ -243,21 +244,21 @@ ui <- fluidPage(theme = shinytheme("sandstone"),   #slate
                                       "test6 ?"
                                     )
                                     )),
-                           
-                           
-                           
-                           
-                           tabPanel("EXPLORATORY DATA ANALYSIS",  
+
+
+
+
+                           tabPanel("EXPLORATORY DATA ANALYSIS",
                                     plotOutput(outputId = "lineplot3", height = "630px")),
-                                    
-                           
-                                                          
-                                                          
-                                                
+
+
+
+
+
                            tabPanel("MODELING 1",
                                     HTML(paste(
                                       '<br/>',
-                                      
+
                                       "test 1?",'<br/>',
                                       "test 2?",'<br/>',
                                       "test 3 ?",'<br/>',
@@ -269,11 +270,11 @@ ui <- fluidPage(theme = shinytheme("sandstone"),   #slate
                                     )
                                     )
                   ),
-                  tabPanel("MODELING 2", 
-                           
+                  tabPanel("MODELING 2",
+
                            HTML(paste(
                              '<br/>',
-                             
+
                              "test 1?",'<br/>',
                              "test 2?",'<br/>',
                              "test 3 ?",'<br/>',
@@ -284,10 +285,10 @@ ui <- fluidPage(theme = shinytheme("sandstone"),   #slate
                              "test6 ?"
                            )
                            )),
-                tabPanel("PERSPECTIVE ON THE DATASET", 
+                tabPanel("PERSPECTIVE ON THE DATASET",
                          HTML(paste(
                            '<br/>',
-                           
+
                            "test 1?",'<br/>',
                            "test 2?",'<br/>',
                            "test 3 ?",'<br/>',
@@ -299,11 +300,11 @@ ui <- fluidPage(theme = shinytheme("sandstone"),   #slate
                          )
                          )
                          ),
-                
-                tabPanel("CONCLUSION", 
+
+                tabPanel("CONCLUSION",
                          HTML(paste(
                            '<br/>',
-                           
+
                            "test 1?",'<br/>',
                            "test 2?",'<br/>',
                            "test 3 ?",'<br/>',
@@ -315,37 +316,37 @@ ui <- fluidPage(theme = shinytheme("sandstone"),   #slate
                          )
                          )
                 ),
-                
-                
+
+
                 tabPanel("About / GitHub",
                          "Baptiste Mokas",
-                         
-                         
+
+
                          HTML(paste('<br/>',
                                     h4("baptiste.mokas@gmail.com"),'<br/>',
                                     "This application is a project conducted during the NYC DATASCIENCE ACADEMY bootcamp in 2020",
                                     h2("Thank you")
-                                    
+
                                     ))
-                        
-                         
+
+
                          )
             )
-)          
-                
-                
+)
+
+
 # Define server function
 server <- function(input, output) {
-  
 
-  
+
+
 
   # Create scatterplot object the plotOutput function is expecting
 
 
-  
 
-  
+
+
   url <- a("Google Homepage", href="https://www.google.com/")
   output$tab <- renderUI({
     tagList("URL link:", url)
