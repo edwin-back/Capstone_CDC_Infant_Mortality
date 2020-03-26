@@ -5,27 +5,26 @@ library(shiny)
 library(shinyWidgets)
 library(shinydashboard)
 library(dplyr)
-library(stats)
 library(ggplot2)
 library(plotly)
 library(bootstraplib)
-library(rsconnect)
 
 #############################             IMPORT OF RAW DATA    ######################
 ######################################################################################
 ######################################################################################
 
 # Load data
-# df_mort = read.csv('mort17_dead.csv') # dead infants; 5570 rows (a quarter of 22,280)
-# df_mort = df_mort %>% select(everything(), -X)
-# df_live = read.csv('mort17_live.csv') # live infants; 966,196 rows (a quarter of 3.8 million)
-# df_live = df_live %>% select(everything(), -X)
-# 
-# natall_small = read.csv('natall_small.csv', stringsAsFactors = F)
-# final_del_bmi18 = read.csv('final_delivery_bmi18.csv')
-# 
-# risk_factors = read.csv('health_risks.csv') %>% select(everything(), -X)
-# infections = read.csv('health_infections.csv') %>% select(everything(), -X)
+df_mort = read.csv('mort17_dead.csv') # dead infants; 5570 rows (a quarter of 22,280)
+df_mort = df_mort %>% select(everything(), -X)
+df_live = read.csv('mort17_live_small.csv') # live infants; 966,196 rows (a quarter of 3.8 million)
+df_live = df_live %>% select(everything(), -X)
+
+natall_small = read.csv('natall_xsmall.csv', stringsAsFactors = F)
+natall_small = natall_small %>% select(everything(), -X)
+
+final_del_bmi18 = read.csv('final_delivery_bmi18.csv') %>% select(everything(), -X)
+risk_factors = read.csv('health_risks.csv') %>% select(everything(), -X)
+infections = read.csv('health_infections.csv') %>% select(everything(), -X)
 
 #############################                 PREPROCESSING      #####################
 ######################################################################################
@@ -39,14 +38,9 @@ bs_theme_add_variables(
   "font-size-base" = "1.1rem"
 )
 
-### Uncomment when deploying the Shiny App
-### rsconnect::setAccountInfo(name='mikelim91',
-                          #token='E4388F626B940A3844945D6982FC351A',
-                          #secret='3El4/BUHlwayvJl/rvgvCyhWxv+DXTYt7jrRsruV')
-
 ui <- shinyUI(fluidPage(bootstrap(),  # minty https://bootswatch.com/
                 # Main navbar
-                navbarPage(title = "CDC Infant Natality & Mortality Analysis", inverse = TRUE, collapsible=T, icon("plus-square"),
+                navbarPage(title = "IPAP | Infant Natality & Mortality Analysis", inverse = TRUE, collapsible=T, icon("plus-square"),
                            tabPanel("Get Started", # Outer Navbar - Get Started
                                    fluidRow(
                                      column(4,
@@ -181,7 +175,7 @@ ui <- shinyUI(fluidPage(bootstrap(),  # minty https://bootswatch.com/
                                                                                                                                      'American Indian Alaskan Native',
                                                                                                                                      'Asian',
                                                                                                                                      'Native Hawaiian or Pacific Islander',
-                                                                                                                                     'More Than One (Mixed)'), selected=F), br()
+                                                                                                                                     'More Than One (Mixed)'), selected=F), br(),
                                                                       ),
                                                                       # Main panel for displaying outputs
                                                                       mainPanel(
@@ -225,6 +219,7 @@ ui <- shinyUI(fluidPage(bootstrap(),  # minty https://bootswatch.com/
                                                                                  h6("Ages 15 to 44 Years Old")
                                                                           )
                                                                         ), hr(),
+                                                                        tableOutput("test1")
                                                                       )
                                                                     )
                                                            )
@@ -352,21 +347,29 @@ ui <- shinyUI(fluidPage(bootstrap(),  # minty https://bootswatch.com/
                                                            tabPanel(
                                                              "Premature Development", br(),
                                                              h3("Average BMI of Mothers with Premature Infants"), hr(),
-                                                             plotlyOutput("bmi_preme")
+                                                             plotlyOutput("bmi_preme"), hr(),
+                                                             tags$ul(
+                                                               tags$li("Gestation period defines the fetal development period from conception to birth"), 
+                                                               tags$li("For humans, the full gestation period is normally 9 months or roughly 39-40 weeks."), 
+                                                             )
                                                            ),
                                                            tabPanel( # convert to columns
                                                              "First 5 Minutes of Life", br(),
                                                              h3("Average BMI of Mothers with Higher 5-Min APGAR Scores"), hr(),
-                                                             plotlyOutput("bmi_5min"), br(), br(),
-                                                             p("APGAR is short for Appearance, Pulse, Grimace, Activity, and Respiration"),
-                                                             p("A 5-minute APGAR score is an overall rating of an infant's health given by the doctor within the first five minutes of being born.")
+                                                             plotlyOutput("bmi_5min"), hr(),
+                                                             tags$ul(
+                                                               tags$li("APGAR is short for Appearance, Pulse, Grimace, Activity, and Respiration"), 
+                                                               tags$li("A 5-minute APGAR score is an overall rating of an infant's health given by the doctor within the FIRST FIVE minutes of being born."), 
+                                                             )
                                                            ),
                                                            tabPanel(
                                                              "First 10 Minutes of Life", br(),
                                                              h3("Average BMI of Mothers with Higher 10-Min APGAR Scores"), hr(),
-                                                             plotlyOutput("bmi_10min"), br(), br(),
-                                                             p("APGAR is short for Appearance, Pulse, Grimace, Activity, and Respiration"),
-                                                             p("A 10-minute APGAR score is an overall rating of an infant's health given by the doctor within the first ten minutes of being born.")
+                                                             plotlyOutput("bmi_10min"), hr(),
+                                                             tags$ul(
+                                                               tags$li("APGAR is short for Appearance, Pulse, Grimace, Activity, and Respiration"), 
+                                                               tags$li("A 10-minute APGAR score is an overall rating of an infant's health given by the doctor within the FIRST TEN minutes of being born."), 
+                                                             )
                                                            ),
                                                            tabPanel(
                                                              "Infant Survival", br(),
@@ -379,7 +382,13 @@ ui <- shinyUI(fluidPage(bootstrap(),  # minty https://bootswatch.com/
                                                              plotlyOutput("bmi_final_del"), hr(),
                                                              p("Along the x-axis, the numbers define the delivery procedure that has 
                                                                taken place for the child, they are as followed:"),
-                                                             p(class = "text-secondary", "1 = Spontaneous, 2 = Forceps, 3 = Vacuum, 4 = Cesarean, 5 = Unknown or not stated"),
+                                                             tags$ol(
+                                                               tags$li("Spontaneous"), 
+                                                               tags$li("Forceps"),
+                                                               tags$li("Vacuum"), 
+                                                               tags$li("Cesarean"), 
+                                                               tags$li("Unknown or Not State")
+                                                             ),
                                                              p("This plot represents the characteristics that are shared between 
                                                                the health of the mother regarding their total BMI during pregnancy, 
                                                                their weight prior to pregnancy, and their weight while going into labor."),
@@ -393,27 +402,56 @@ ui <- shinyUI(fluidPage(bootstrap(),  # minty https://bootswatch.com/
                                       tabPanel("Smoking",
                                                tabsetPanel(type="tabs",
                                                            tabPanel(
-                                                             "Pre Pregnancy", br(),
-                                                             h3("Infant Death Rate of Smoking vs Non-Smoking Mothers"), hr(),
-                                                             plotlyOutput("smoke_pre_preg_plot")
-                                                           ),
-                                                           tabPanel(
                                                              "First Trimester", br(),
                                                              h3("Average Daily Cigarettes Smoked During 1st Trimester"), hr(),
-                                                             plotOutput("first_tri_age"), br(),
-                                                             plotlyOutput("smoke_death1")
+                                                             plotOutput("first_tri_age"), hr(),
+                                                             tags$ul(
+                                                               tags$li("This plot shows the relationship between the daily rate of cigarettes the mother smoked during the 1st trimester of their pregnancy and their respective ages."), 
+                                                               tags$li("The first two trimesters show a similar trend in what is occurring with the mother regarding their level of smoking. The rates do not go above 1.5 in either trimester, however, there does appear to be significant variance withinsmoking trends especially for mothers that are in their 40s."),
+                                                             )
                                                            ),
                                                            tabPanel(
                                                              "Second Trimester", br(),
                                                              h3("Average Daily Cigarettes Smoked During 2nd Trimester"), hr(),
-                                                             plotOutput("second_tri_age"), br(),
-                                                             plotlyOutput("smoke_death2")
+                                                             plotOutput("second_tri_age"), hr(),
+                                                             tags$ul(
+                                                               tags$li("This plot shows the relationship between the daily rate of cigarettes the mother smoked during the 2nd trimester of their pregnancy and their respective ages."), 
+                                                               tags$li("The first two trimesters show a similar trend in what is occurring with the mother regarding their level of smoking. The rates do not go above 1.5 in either trimester, however, there does appear to be significant variance withinsmoking trends especially for mothers that are in their 40s."),
+                                                             )
                                                            ),
                                                            tabPanel(
                                                              "Third Trimester", br(),
                                                              h3("Average Daily Cigarettes Smoked During 3rd Trimester"), hr(),
-                                                             plotOutput("third_tri_age"), br(),
-                                                             plotlyOutput("smoke_death3")
+                                                             plotOutput("third_tri_age"), hr(),
+                                                             tags$ul(
+                                                               tags$li("This plot shows the relationship between the daily rate of cigarettes the mother smoked during the 3rd and final trimester of their pregnancy and their respective ages."), 
+                                                               tags$li("The third trimester is interesting in that it starts off with a high smoking rate, but then sharply drops and stays at about 1, and stays relatively flat up until the mother is in their 40s."),
+                                                               tags$li("A big consistency shown here is that mothers in their 40s tend to smoke the most while being pregnant.")
+                                                             )
+                                                           ),
+                                                           tabPanel(
+                                                             "Pre Pregnancy through Birth", br(),
+                                                             h3("Infant Death Rate of Smoking vs Non-Smoking Mothers"), hr(),
+                                                             plotlyOutput("smoke_pre_preg_plot"), hr(),
+                                                             tags$ul(
+                                                               tags$li("If the mother reports smoking in any of the three trimesters of pregnancy she is classified as a smoker (smoked anytime during pregnancy)"), 
+                                                               tags$li("Women who give birth prior to the 3rd trimester and report smoking during the 1st or 2nd trimester are classified as SMOKERS"),
+                                                               tags$li("Women who give birth prior to the 3rd trimester and report NO smoking during the 1st or 2nd trimester are classified as NON-SMOKERS")
+                                                             ), br(),
+                                                             fluidRow(
+                                                               column(4,
+                                                                      h5(class = "text-center", "1st Trimester"),
+                                                                      plotlyOutput("smoke_death1")
+                                                               ),
+                                                               column(4,
+                                                                      h5(class = "text-center", "2nd Trimester"),
+                                                                      plotlyOutput("smoke_death2")
+                                                               ),
+                                                               column(4,
+                                                                      h5(class = "text-center", "3rd Trimester"),
+                                                                      plotlyOutput("smoke_death3")
+                                                               )
+                                                             )
                                                            )
                                                )
                                       )
@@ -472,7 +510,7 @@ ui <- shinyUI(fluidPage(bootstrap(),  # minty https://bootswatch.com/
                                                      a(href="https://nycdatascience.com/blog/author/mike-lim/", "Project Blog Posts"), br(),
                                                      a(href="mikelim91@gmail.com", "mikelim91@gmail.com"), br(), hr(),
                                                      h4(class="card-title", "Bio"),
-                                                     p(class="card-text", "Mike Lim is a Data Analyst with a background in industrial systems engineering. He graduated from Rutgers University in 2013.")
+                                                     p(class="card-text", "Mike Lim is a Data Analyst with a background in Industrial Engineering, found passion spearheading projects and provided important business insights with a focus on maximizing Return on Investment.")
                                                  )
                                              )
                                       )
@@ -511,6 +549,7 @@ ui <- shinyUI(fluidPage(bootstrap(),  # minty https://bootswatch.com/
 # Define server function
 server <- shinyServer(function(input, output, session) {
   options(shiny.autoreload = TRUE)
+  
   # Basic Stats -> Mother's Age
   basic_age <- function() {
     alive <- df_live %>%
@@ -710,6 +749,7 @@ server <- shinyServer(function(input, output, session) {
     death_rate = dead$death_count / ((alive$live_count + dead$death_count) / 1000) # Infant Mortality Rate per 1000 births
     
     data = data.frame(mom_bmi, death_rate)
+    data$mom_bmi = factor(data$mom_bmi, levels=data$mom_bmi)
     data$death_rate = round(data$death_rate, 1)
     data
   })
@@ -734,13 +774,14 @@ server <- shinyServer(function(input, output, session) {
     infect_no = infections %>% filter(mom_risk == 'No') %>% .$death_rate
     
     data = data.frame(infect, infect_yes, infect_no)
+    data$infect = factor(data$infect, levels=data$infect[order(data$infect_yes, decreasing = F)])
     data
   })
   
   output$health_infections_plot <- renderPlotly({
     f = list(family = "Arial", size = 18)
-    t = list(family = "Arial, sans-serif", size = 16)
-    xlab = list(title = "Most Commonly Present Infections", titlefont = f, tickfont = t)
+    t = list(family = "Arial, sans-serif", size = 15)
+    xlab = list(title = "Most Common Infections", titlefont = f, tickfont = t)
     ylab = list(title = "Infant Deaths Per 1,000 Births", titlefont = f, tickfont = t)
     
     fig <- plot_ly(health_infections(), x = ~infect, y = ~infect_yes, type = 'bar', name = 'Infection Present',
@@ -759,12 +800,13 @@ server <- shinyServer(function(input, output, session) {
     data = data.frame(risk, risk_yes, risk_no)
     data$risk_yes = round(data$risk_yes, 1)
     data$risk_no = round(data$risk_no, 1)
+    data$risk = factor(data$risk, levels=data$risk[order(data$risk_yes, decreasing = F)])
     data
   })
   
   output$health_risks_plot <- renderPlotly({
     f = list(family = "Arial", size = 18)
-    t = list(family = "Arial, sans-serif", size = 16)
+    t = list(family = "Arial, sans-serif", size = 15)
     xlab = list(title = "Most Commonly Diagnosed Risk Factors", titlefont = f, tickfont = t)
     ylab = list(title = "Infant Deaths Per 1,000 Births", titlefont = f, tickfont = t)
     
@@ -929,13 +971,13 @@ server <- shinyServer(function(input, output, session) {
   }
   output$bmi_preme <- renderPlotly({
     plot_ly(p4(), x = ~combined_gestation_wk, name = "Mothers BMI",
-            line = list(color = 'rgb(0, 0, 0)', width = 1)) %>%
-      add_trace(y = ~average, name = "Fetal Development at Birth", mode='lines+markers',dash='dash') %>% 
-      layout(xaxis = list(title = "Gestation Period (weeks)"),
+            line = list(color = 'rgb(0, 0, 0)', width = 1.7)) %>%
+    add_trace(y = ~average, name = "Fetal Development at Birth", mode='lines+markers', dash='dash') %>% 
+    layout(xaxis = list(title = "Gestation Period (weeks)",autotick = F, dtick = 1),
              yaxis = list(title = "Average Mother's Body Mass Index (BMI)")) %>%
-      add_trace(
+    add_trace(
         x = c(38,39,40),
-        y = c(28.98222,28.84011,28.43967),
+        y = c(28.97767,28.83423,28.40390),
         marker = list(
           color = 'rgba(17, 157, 255,0)',
           size = 20,
@@ -944,13 +986,12 @@ server <- shinyServer(function(input, output, session) {
             width = 2
           )
         ),
-        showlegend = F
-      ) %>% 
+        showlegend = F) %>% 
       add_trace(
         x = c(17:37),
-        y = c(40.61111,36.69706,37.74408,38.77598,37.78296,36.665474,35.59231,34.54177,
-              33.42062,32.2899,32.606,32.73843,31.86384,31.6043,31.14695,31.25102,31.12922,
-              30.59386,30.24277,29.87827,29.57763),
+        y = c(44.87188,38.91848,37.79237,38.89326,36.29645,36.60242,36.17169,33.99834,
+              33.44437,32.32302,32.99470,33.57615,31.49042,32.04728,31.03830,31.56771,31.03475,
+              30.53717,30.36987,29.81584,29.60271),
         marker = list(
           color = 'rgba(17, 157, 255,0)',
           size = 20,
@@ -959,8 +1000,7 @@ server <- shinyServer(function(input, output, session) {
             width = 2
           )
         ),
-        showlegend = F
-      )
+        showlegend = F)
   })
   
   # Weight/BMI -> APGAR 5 min
@@ -1056,64 +1096,19 @@ server <- shinyServer(function(input, output, session) {
   })
   
   output$smoke_pre_preg_plot <- renderPlotly({
-    f = list(family = "Arial", size = 18)
-    t = list(family = "Arial, sans-serif", size = 16)
+    f = list(family = "Arial", size = 17)
+    t = list(family = "Arial, sans-serif", size = 15)
     xlab = list(title = "", titlefont = f, tickfont = t)
     ylab = list(title = "Number of Infant Deaths Per 1,000 Births", titlefont = f, tickfont = t)
     
     fig <- plot_ly(smoke_pre_preg(), y = ~mom_tobacco, x = ~death_rate, type='bar', orientation = 'h',
                    text = smoke_pre_preg()$death_rate, textposition = 'auto',
-                   marker = list(color="rgb(251,106,74)", line = list(color = "rgb(203,24,29)", width = 3)))
+                   marker = list(color="rgb(253,141,60)", line = list(color = "rgb(203,24,29)", width = 3)))
     fig <- fig %>% layout(xaxis = ylab, yaxis = xlab)
     fig
   })
   
-  # Smoking - trimesters
-  mtobacco_age = reactive({
-    natall_small %>% 
-      filter(mothers_age > 14) %>% 
-      group_by(mothers_age) %>% 
-      summarise_at(vars(cigs_tri1, cigs_tri2, cigs_tri3),
-                   list(average = mean))
-  })
-
-  # Smoking -> 1st trimester Tobacco Use
-  output$first_tri_age = renderPlot({
-    mtobacco_age1 = ggplot(mtobacco_age(), aes(x=mothers_age, y=cigs_tri1_average, group=1)) +
-      geom_line(linetype="dashed", color="red", size=0.7)+
-      labs(title ="Average Tobacco Use in the 1st Trimester in Relation to the Age of the Mother")+
-      xlab("Mothers Age")+
-      ylab("Average Tobacco Use in Trimester 1") +
-      geom_point(size=3)
-    
-    mtobacco_age1
-  })
-  
-  # Smoking -> 2nd trimester Tobacco Use
-  output$second_tri_age = renderPlot({
-    mtobacco_age2 = ggplot(mtobacco_age(), aes(x=mothers_age, y=cigs_tri2_average, group=1)) +
-      geom_line(linetype="dashed", color="red", size=0.7)+
-      labs(title ="Average Tobacco Use in the 2nd Trimester in Relation to the Age of the Mother")+
-      xlab("Mothers Age")+
-      ylab("Average Tobacco Use in Trimester 2")+
-      geom_point(size=3)
-    
-    mtobacco_age2
-  })
-
-  # Smoking -> 3rd trimester Tobacco Use
-  output$third_tri_age = renderPlot({
-    mtobacco_age3= ggplot(mtobacco_age(), aes(x=mothers_age, y=cigs_tri3_average, group=1)) +
-      geom_line(linetype="dashed", color="red", size=0.7)+
-      labs(title ="Average Tobacco Use in the 3rd Trimester in Relation to the Age of the Mother")+
-      xlab("Mothers Age")+
-      ylab("Average Tobacco Use in Trimester 3")+
-      geom_point(size=3)
-    
-    mtobacco_age3
-  })
-  
-  # Tobacco Use and NICU Admittance
+  # 1st tri smoker vs non smoker
   smoke_1st_tri <- reactive({
     # Non Smokers
     alive_nonsmoker <- df_live %>%
@@ -1154,18 +1149,19 @@ server <- shinyServer(function(input, output, session) {
   })
   
   output$smoke_death1 <- renderPlotly({
-    f = list(family = "Arial", size = 18)
-    t = list(family = "Arial, sans-serif", size = 16)
+    f = list(family = "Arial", size = 17)
+    t = list(family = "Arial, sans-serif", size = 15)
     xlab = list(title = "", titlefont = f, tickfont = t)
     ylab = list(title = "Number of Infant Deaths Per 1,000 Births", titlefont = f, tickfont = t)
     
-    fig <- plot_ly(smoke_1st_tri(), y = ~mom_tobacco, x = ~death_rate, type='bar', orientation = 'h',
+    fig <- plot_ly(smoke_1st_tri(), x = ~mom_tobacco, y = ~death_rate, type='bar',
                    text = smoke_1st_tri()$death_rate, textposition = 'auto',
-                   marker = list(color="rgb(251,106,74)", line = list(color = "rgb(203,24,29)", width = 3)))
-    fig <- fig %>% layout(xaxis = ylab, yaxis = xlab)
+                   marker = list(color="rgb(252,146,114)", line = list(color = "rgb(203,24,29)", width = 3)))
+    fig <- fig %>% layout(xaxis = xlab, yaxis = ylab)
     fig
   })
   
+  # 2nd tri smoker vs non smoker
   smoke_2nd_tri <- reactive({
     # Non Smokers
     alive_nonsmoker <- df_live %>%
@@ -1207,18 +1203,19 @@ server <- shinyServer(function(input, output, session) {
   })
   
   output$smoke_death2 <- renderPlotly({
-    f = list(family = "Arial", size = 18)
-    t = list(family = "Arial, sans-serif", size = 16)
+    f = list(family = "Arial", size = 17)
+    t = list(family = "Arial, sans-serif", size = 15)
     xlab = list(title = "", titlefont = f, tickfont = t)
     ylab = list(title = "Number of Infant Deaths Per 1,000 Births", titlefont = f, tickfont = t)
     
-    fig <- plot_ly(smoke_2nd_tri(), y = ~mom_tobacco, x = ~death_rate, type='bar', orientation = 'h',
+    fig <- plot_ly(smoke_2nd_tri(), x = ~mom_tobacco, y = ~death_rate, type='bar',
                    text = smoke_2nd_tri()$death_rate, textposition = 'auto',
                    marker = list(color="rgb(251,106,74)", line = list(color = "rgb(203,24,29)", width = 3)))
-    fig <- fig %>% layout(xaxis = ylab, yaxis = xlab)
+    fig <- fig %>% layout(xaxis = xlab, yaxis = ylab)
     fig
   })
   
+  # 3rd tri smoker vs non smoker
   smoke_3rd_tri <- reactive({
     # Non Smokers
     alive_nonsmoker <- df_live %>%
@@ -1260,17 +1257,64 @@ server <- shinyServer(function(input, output, session) {
   })
   
   output$smoke_death3 <- renderPlotly({
-    f = list(family = "Arial", size = 18)
-    t = list(family = "Arial, sans-serif", size = 16)
+    f = list(family = "Arial", size = 17)
+    t = list(family = "Arial, sans-serif", size = 15)
     xlab = list(title = "", titlefont = f, tickfont = t)
-    ylab = list(title = "Number of Infant Deaths Per 1,000 Births", titlefont = f, tickfont = t)
+    ylab = list(title = "", titlefont = f, tickfont = t)
     
-    fig <- plot_ly(smoke_3rd_tri(), y = ~mom_tobacco, x = ~death_rate, type='bar', orientation = 'h',
+    fig <- plot_ly(smoke_3rd_tri(), x = ~mom_tobacco, y = ~death_rate, type='bar',
                    text = smoke_3rd_tri()$death_rate, textposition = 'auto',
-                   marker = list(color="rgb(251,106,74)", line = list(color = "rgb(203,24,29)", width = 3)))
-    fig <- fig %>% layout(xaxis = ylab, yaxis = xlab)
+                   marker = list(color="rgb(239,59,44)", line = list(color = "rgb(203,24,29)", width = 3)))
+    fig <- fig %>% layout(xaxis = xlab, yaxis = ylab)
     fig
   })
+  
+  # Smoking - trimesters
+  mtobacco_age = reactive({
+    natall_small %>% 
+      filter(mothers_age > 14) %>% 
+      group_by(mothers_age) %>% 
+      summarise_at(vars(cigs_tri1, cigs_tri2, cigs_tri3),
+                   list(average = mean))
+  })
+
+  # Smoking -> 1st trimester Tobacco Use
+  output$first_tri_age = renderPlot({
+    mtobacco_age1 = ggplot(mtobacco_age(), aes(x=mothers_age, y=cigs_tri1_average, group=1)) +
+      geom_line(linetype="dashed", color="blue", size=0.7)+
+      labs(title ="Average Tobacco Use in the 1st Trimester in Relation to the Age of the Mother")+
+      xlab("Mothers Age")+
+      ylab("Average Tobacco Use in Trimester 1") +
+      geom_point(size=3)
+    
+    mtobacco_age1
+  })
+  
+  # Smoking -> 2nd trimester Tobacco Use
+  output$second_tri_age = renderPlot({
+    mtobacco_age2 = ggplot(mtobacco_age(), aes(x=mothers_age, y=cigs_tri2_average, group=1)) +
+      geom_line(linetype="dashed", color="orange", size=0.7)+
+      labs(title ="Average Tobacco Use in the 2nd Trimester in Relation to the Age of the Mother")+
+      xlab("Mothers Age")+
+      ylab("Average Tobacco Use in Trimester 2")+
+      geom_point(size=3)
+    
+    mtobacco_age2
+  })
+
+  # Smoking -> 3rd trimester Tobacco Use
+  output$third_tri_age = renderPlot({
+    mtobacco_age3= ggplot(mtobacco_age(), aes(x=mothers_age, y=cigs_tri3_average, group=1)) +
+      geom_line(linetype="dashed", color="red", size=0.7)+
+      labs(title ="Average Tobacco Use in the 3rd Trimester in Relation to the Age of the Mother")+
+      xlab("Mothers Age")+
+      ylab("Average Tobacco Use in Trimester 3")+
+      geom_point(size=3)
+    
+    mtobacco_age3
+  })
+  
+
 })
     
 # Create Shiny object

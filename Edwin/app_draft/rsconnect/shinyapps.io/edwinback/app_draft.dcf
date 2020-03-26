@@ -5,6 +5,8 @@ account: edwinback
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1991560
-bundleId: 2921192
+bundleId: 2928545
 url: https://edwinback.shinyapps.io/app_draft/
-when: 1585111440.76565
+when: 1585246867.76311
+asMultiple: FALSE
+asStatic: FALSE
